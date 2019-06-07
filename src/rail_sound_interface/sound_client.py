@@ -159,7 +159,7 @@ class SoundClient(object):
         # know how to play audio at standard frame rate (like 44.1k)
         return sound_with_altered_frame_rate.set_frame_rate(sound.frame_rate)
 
-    def __init__(self, beeps=None, affects=None, server_name=None):
+    def __init__(self, server_name=None, beeps=None, affects=None):
         # Want to reimplement SoundClient so that we are always using the action
         # interface to the sound_play_node.
         server_name = (server_name or SoundClient.SOUND_PLAY_SERVER)
@@ -202,6 +202,7 @@ class SoundClient(object):
             SoundClient.AFFECT_ANGRY: SoundClient.make_angry,
         }
 
+    def connect(self):
         # Need to connect to the server
         rospy.loginfo("Connecting to {}...".format(SoundClient.SOUND_PLAY_SERVER))
         self.sound_client.wait_for_server()

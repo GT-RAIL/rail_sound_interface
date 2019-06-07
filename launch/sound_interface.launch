@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <!-- The name of the  -->
+  <!-- Use docker? -->
+  <arg name="use_docker" defult="true" />
+
+  <!-- The name of the voice -->
   <arg name="voice" default="dfki-prudence-hsmm" />
 
   <!-- Launch the sound server -->
@@ -9,5 +12,5 @@
   </node>
 
   <!-- Start the docker container -->
-  <node name="docker_starter" pkg="rail_sound_interface" type="launch_docker.sh" args="$(arg voice)" respawn="false" />
+  <node name="docker_starter" pkg="rail_sound_interface" type="launch_docker.sh" args="$(arg voice)" respawn="false" if="$(arg use_docker)" />
 </launch>

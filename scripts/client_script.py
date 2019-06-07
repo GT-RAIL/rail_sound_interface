@@ -29,6 +29,7 @@ def _get_arg_parser(client=None):
         client = SoundClient()
 
     parser = argparse.ArgumentParser()
+    parser.add_argument("--server", help="Name of the action server for sounds")
     subparsers = parser.add_subparsers()
 
     speak_parser = subparsers.add_parser("speak", help="get the robot to speak")
@@ -48,9 +49,12 @@ def _get_arg_parser(client=None):
 # The main script
 def main():
     rospy.init_node('speaker_test')
-    client = SoundClient()
-    parser = _get_arg_parser(client)
+    parser = _get_arg_parser()
     args = parser.parse_args(rospy.myargv(sys.argv)[1:])
+
+    client = SoundClient(server_name=args.server)
+    client.connect()
+
     args.func(client, args)
     rospy.sleep(0.5)
 
