@@ -42,7 +42,7 @@ class SoundServer(object):
 
     DEFAULT_SOUNDPLAY_COMMAND = "play"
     DEFAULT_SOUNDPLAY_ARGS = ["-q"]
-    SOUND_SERVER_NAME = "sound_server"
+    SOUND_SERVER_NAME = "rail_sound_server"
 
     def __init__(self):
         # Managing the sound requests that come into the action server. This is

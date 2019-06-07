@@ -1,4 +1,4 @@
-# Sound Interface
+# RAIL Sound Interface
 
 This package generates sounds for the robot.
 

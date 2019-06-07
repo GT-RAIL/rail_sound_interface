@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>sound_interface</name>
+  <name>rail_sound_interface</name>
   <version>1.0.0</version>
-  <description>The sound_interface package</description>
+  <description>The rail_sound_interface package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

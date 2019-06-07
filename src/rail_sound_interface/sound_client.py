@@ -18,6 +18,8 @@ import actionlib
 
 from sound_play.msg import SoundRequestAction, SoundRequestGoal, SoundRequest
 
+from rail_sound_interface.sound_server import SoundServer
+
 # Helper functions
 
 FILENAME_CHARS = list("abcdefghijklmnopqrstuvwxyz0123456789_")
@@ -93,7 +95,7 @@ class SoundClient(object):
     SPEECH_GAIN_DB = 15
 
     # ROS Constants
-    SOUND_PLAY_SERVER = "/sound_server"
+    SOUND_PLAY_SERVER = SoundServer.SOUND_SERVER_NAME
 
     @staticmethod
     def make_happy(text):
@@ -156,11 +158,12 @@ class SoundClient(object):
         # know how to play audio at standard frame rate (like 44.1k)
         return sound_with_altered_frame_rate.set_frame_rate(sound.frame_rate)
 
-    def __init__(self, beeps=None, affects=None):
+    def __init__(self, beeps=None, affects=None, server_name=None):
         # Want to reimplement SoundClient so that we are always using the action
         # interface to the sound_play_node.
         self.sound_client = actionlib.SimpleActionClient(
-            SoundClient.SOUND_PLAY_SERVER, SoundRequestAction
+            (server_name or SoundClient.SOUND_PLAY_SERVER),
+            SoundRequestAction
         )
 
         # Background thread to clear out speech files when they're done
@@ -171,7 +174,7 @@ class SoundClient(object):
         self.beeps = beeps
         if self.beeps is None:
             default_sound_path = os.path.join(
-                rospkg.RosPack().get_path('sound_interface'),
+                rospkg.RosPack().get_path('rail_sound_interface'),
                 'sounds'
             )
             self.beeps = {
@@ -336,7 +339,7 @@ class SoundClient(object):
 if __name__ == '__main__':
     # For testing purposes
     rospy.init_node('speaker_test')
-    SoundClient.SOUND_PLAY_SERVER = "sound_play"
+    # SoundClient.SOUND_PLAY_SERVER = "sound_play"
     client = SoundClient()
 
     def on_speak(args):

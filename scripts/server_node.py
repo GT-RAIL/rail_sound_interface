@@ -3,7 +3,7 @@
 
 import rospy
 
-from sound_interface.sound_server import SoundServer
+from rail_sound_interface import SoundServer
 
 
 def main():
