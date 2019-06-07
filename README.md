@@ -41,6 +41,8 @@ rosrun rail_sound_interface client_script speak "The answer to life, the univers
 rosrun rail_sound_interface client_script beep CHEERFUL
 ```
 
+**Note**: After stopping the launch file, don't forget to shut down the TTS container running in the background! `docker stop marytts`
+
 
 ## Client
 
