@@ -166,6 +166,9 @@ class SoundClient(object):
             SoundRequestAction
         )
 
+        # Change the client speech gain based on a rosparam
+        SoundClient.SPEECH_GAIN_DB = rospy.get_param('~speech_gain', SoundClient.SPEECH_GAIN_DB)
+
         # Background thread to clear out speech files when they're done
         self._tmp_speech_files = Queue.Queue()
         self._tmp_speech_cleanup_thread = rospy.Timer(rospy.Duration(60), callback=self._cleanup)
@@ -334,35 +337,3 @@ class SoundClient(object):
             if os.path.exists(filename):
                 rospy.logdebug("Removing temp speech file: {}".format(filename))
                 os.remove(filename)
-
-
-if __name__ == '__main__':
-    # For testing purposes
-    rospy.init_node('speaker_test')
-    # SoundClient.SOUND_PLAY_SERVER = "sound_play"
-    client = SoundClient()
-
-    def on_speak(args):
-        text = args.text
-        affect = args.affect
-        client.say(text, affect, blocking=True)
-
-    def on_beep(args):
-        client.beep(args.key, blocking=True)
-
-    parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers()
-
-    speak_parser = subparsers.add_parser("speak", help="get the robot to speak")
-    speak_parser.add_argument("text", help="text to speak")
-    speak_parser.add_argument("--affect", choices=client.get_affect_names(),
-                              help="say things in an affected voice")
-    speak_parser.set_defaults(func=on_speak)
-
-    beep_parser = subparsers.add_parser("beep", help="get the robot to beep")
-    beep_parser.add_argument("key", help="type of beep to produce",
-                             choices=client.get_beep_names())
-    beep_parser.set_defaults(func=on_beep)
-
-    args = parser.parse_args()
-    args.func(args)
