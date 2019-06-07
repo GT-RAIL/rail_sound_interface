@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- The name of the  -->
+  <arg name="voice" default="dfki-prudence-hsmm" />
+
+  <!-- Launch the sound server -->
+  <node name="rail_sound_server" pkg="rail_sound_interface" type="server_node.py" required="true">
+    <param name="voice" value="$(arg voice)" />
+  </node>
+
+  <!-- Start the docker container -->
+  <node name="docker_starter" pkg="rail_sound_interface" type="launch_docker.sh" args="$(arg voice)" respawn="false" />
+</launch>

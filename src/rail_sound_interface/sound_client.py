@@ -162,14 +162,12 @@ class SoundClient(object):
     def __init__(self, beeps=None, affects=None, server_name=None):
         # Want to reimplement SoundClient so that we are always using the action
         # interface to the sound_play_node.
-        self.sound_client = actionlib.SimpleActionClient(
-            (server_name or SoundClient.SOUND_PLAY_SERVER),
-            SoundRequestAction
-        )
+        server_name = (server_name or SoundClient.SOUND_PLAY_SERVER)
+        self.sound_client = actionlib.SimpleActionClient(server_name, SoundRequestAction)
 
         # Change the client speech settings based on rosparams
-        self._speech_gain = rospy.get_param('~speech_gain', SoundClient.DEFAULT_SPEECH_GAIN_DB)
-        self._voice = rospy.get_param('~voice', SoundClient.DEFAULT_SPEECH_VOICE)
+        self._speech_gain = rospy.get_param('{}/speech_gain'.format(server_name), SoundClient.DEFAULT_SPEECH_GAIN_DB)
+        self._voice = rospy.get_param('{}/voice'.format(server_name), SoundClient.DEFAULT_SPEECH_VOICE)
 
         # Background thread to clear out speech files when they're done
         self._tmp_speech_files = Queue.Queue()
