@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <!-- Use docker? -->
-  <arg name="use_docker" defult="true" />
+  <arg name="use_docker" default="true" />
 
   <!-- The name of the voice -->
   <arg name="voice" default="dfki-prudence-hsmm" />
