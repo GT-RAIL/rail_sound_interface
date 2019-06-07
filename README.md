@@ -11,7 +11,7 @@ In order to perform TTS, the packages in this folder use [Mary TTS](http://mary.
 The code in this repository needs: `sox`, `requests`, `psutil`, and `pydub`.
 
 ```bash
-sudo apt-get install sox
+sudo apt install sox
 sudo -H pip install requests psutil pydub
 ```
 
@@ -24,7 +24,15 @@ If you have docker running, simply run:
 docker run -d --rm --name marytts -p 59125:59125 gtrail/marytts:dfki-prudence-hsmm
 ```
 
-This will start up MARY TTS with the `dfki-prudence-hsmm` voice installed. The image tag is meant to denote the different voices, but we only have a single voice tag in the remote docker hub at the moment.
+This will start up MARY TTS with the `dfki-prudence-hsmm` voice installed. The image tag is meant to denote the different voices.
+
+If you ever need to build the docker image with a new voice (`<voice>`), then run:
+
+```bash
+docker build -t gtrail/marytts:<voice> --build-arg MARYTTS_VOICE=<voice> docker/marytts/
+```
+
+Once the image is built, you can change the tag used in the previous `docker run` command.
 
 
 ### MARY: Local installation

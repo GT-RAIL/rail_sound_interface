@@ -92,7 +92,8 @@ class SoundClient(object):
     MARY_SERVER_TIMEOUT = 30  # Number of seconds to wait before timing out
 
     # Speech params
-    SPEECH_GAIN_DB = 15
+    DEFAULT_SPEECH_GAIN_DB = 15
+    DEFAULT_SPEECH_VOICE = 'dfki-prudence-hsmm'
 
     # ROS Constants
     SOUND_PLAY_SERVER = SoundServer.SOUND_SERVER_NAME
@@ -166,8 +167,9 @@ class SoundClient(object):
             SoundRequestAction
         )
 
-        # Change the client speech gain based on a rosparam
-        SoundClient.SPEECH_GAIN_DB = rospy.get_param('~speech_gain', SoundClient.SPEECH_GAIN_DB)
+        # Change the client speech settings based on rosparams
+        self._speech_gain = rospy.get_param('~speech_gain', SoundClient.DEFAULT_SPEECH_GAIN_DB)
+        self._voice = rospy.get_param('~voice', SoundClient.DEFAULT_SPEECH_VOICE)
 
         # Background thread to clear out speech files when they're done
         self._tmp_speech_files = Queue.Queue()
@@ -238,7 +240,7 @@ class SoundClient(object):
             'INPUT_TEXT': text,
             'INPUT_TYPE': 'SSML',
             'LOCALE': 'en_GB',
-            'VOICE': 'dfki-prudence-hsmm',
+            'VOICE': self._voice,
             'OUTPUT_TYPE': 'AUDIO',
             'AUDIO': 'WAVE',
             # 'effect_Robot_selected': 'on',
@@ -258,7 +260,7 @@ class SoundClient(object):
 
         # Increase the volume on the temp file
         speech = AudioSegment(data=r.content)
-        speech = speech + SoundClient.SPEECH_GAIN_DB
+        speech = speech + self._speech_gain
         speech = SoundClient.change_audio_speed(speech, 0.95)
         speech = speech.set_frame_rate(int(speech.frame_rate*2.0))
 
