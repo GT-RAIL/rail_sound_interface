@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <!-- Use docker? -->
-  <arg name="use_docker" default="true" />
+  <!-- Docker container name. If "false", then do not start container -->
+  <arg name="docker_name" default="marytts" />
 
   <!-- The name of the voice -->
   <arg name="voice" default="dfki-prudence-hsmm" />
@@ -12,5 +12,5 @@
   </node>
 
   <!-- Start the docker container -->
-  <node name="docker_starter" pkg="rail_sound_interface" type="launch_docker.sh" args="$(arg voice)" respawn="false" if="$(arg use_docker)" />
+  <node name="docker_starter" pkg="rail_sound_interface" type="launch_docker.sh" args="$(arg voice) $(arg docker_name)" respawn="false" if="$(eval arg('docker_name') != false)" />
 </launch>
